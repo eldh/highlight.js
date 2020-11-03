@@ -20,13 +20,15 @@
     "type": "git",
     "url": "git://github.com/highlightjs/highlight.js.git"
   },
-  "main": "./lib/index.js",
+  "main": "./build/node/lib/index.js",
+  "module": "./build/esm/highlight.min.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "mocha": "mocha",
     "lint": "eslint -c .eslintrc.js src/*.js src/lib/*.js",
     "build_and_test": "npm run build && npm run test",
-    "build": "node ./tools/build.js -t node",
+    "build": "node ./tools/build.js -t all",
+    "build-node": "node ./tools/build.js -t node",
     "build-cdn": "node ./tools/build.js -t cdn",
     "build-browser": "node ./tools/build.js -t browser :common",
     "test": "mocha test",

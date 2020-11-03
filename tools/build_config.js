@@ -7,7 +7,7 @@ module.exports = {
   clean_css: {},
   rollup: {
     node: {
-      output: { format: 'esm' },
+      output: { format: 'cjs', strict: false, exports: 'auto' },
       input: {
         plugins: [
           cjsPlugin(),
@@ -27,22 +27,24 @@ module.exports = {
       input: {
         plugins: [jsonPlugin()],
       },
-      output: {
-        name: 'hljs',
-        format: 'iife',
-        footer:
-          "if (typeof exports === 'object' && typeof module !== 'undefined') { module.exports = hljs; }",
-        interop: false,
-      },
+      output: { format: 'esm' },
     },
     browser: {
-      input: {
-        plugins: [cjsPlugin(), jsonPlugin()],
-      },
-      output: {
-        format: 'iife',
-        outro: 'return module.exports.definer || module.exports;',
-        interop: false,
+      node: {
+        output: { format: 'esm' },
+        input: {
+          plugins: [
+            jsonPlugin(),
+            {
+              transform: (x) => {
+                if (/var module/.exec(x)) {
+                  // remove shim that only breaks things for rollup
+                  return x.replace(/var module\s*=.*$/m, '')
+                }
+              },
+            },
+          ],
+        },
       },
     },
   },
