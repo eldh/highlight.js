@@ -57,51 +57,49 @@
 //
 // All build targets will end up in the `build` directory.
 
-'use strict';
+'use strict'
 
-const commander = require('commander');
-const path      = require('path');
-const { clean } = require("./lib/makestuff")
+const commander = require('commander')
+const path = require('path')
+const { clean } = require('./lib/makestuff')
 const log = (...args) => console.log(...args)
 
-const TARGETS = ["cdn", "browser", "node"];
-let dir = {};
+const TARGETS = ['esm', 'node']
+let dir = {}
 
 commander
   .usage('[options] [<language>...]')
   .option('-n, --no-minify', 'Disable minification')
-  .option('-t, --target <name>', 'Build for target ' +
-                                 '[all, browser, cdn, node]',
-                                  'browser')
-  .parse(process.argv);
+  .option('-t, --target <name>', 'Build for target ' + '[all, esm, node]', 'browser')
+  .parse(process.argv)
 
-commander.target = commander.target.toLowerCase();
+commander.target = commander.target.toLowerCase()
 
-dir.root  = path.dirname(__dirname);
-dir.buildRoot = path.join(dir.root, 'build');
+dir.root = path.dirname(__dirname)
+dir.buildRoot = path.join(dir.root, 'build')
 
 async function doTarget(target, buildDir) {
-  const build     = require(`./build_${target}`);
-  process.env.BUILD_DIR = buildDir;
-  await clean(buildDir);
-  await build.build({languages: commander.args, minify: commander.minify});
-};
+  const build = require(`./build_${target}`)
+  process.env.BUILD_DIR = buildDir
+  await clean(buildDir)
+  await build.build({ languages: commander.args, minify: commander.minify })
+}
 
 async function doBuild() {
-  log ("Starting build.");
-  if (commander.target=="all") {
-    await clean(dir.buildRoot);
+  log('Starting build.')
+  if (commander.target == 'all') {
+    await clean(dir.buildRoot)
     for (let target of TARGETS) {
-      log (`** Building ${target.toUpperCase()}. **`);
-      let buildDir = path.join(dir.buildRoot, target);
-      await doTarget(target, buildDir);
+      log(`** Building ${target.toUpperCase()}. **`)
+      let buildDir = path.join(dir.buildRoot, target)
+      await doTarget(target, buildDir)
     }
   } else if (TARGETS.includes(commander.target)) {
-    doTarget(commander.target, dir.buildRoot);
+    doTarget(commander.target, dir.buildRoot)
   } else {
-    log(`ERROR: I do not know how to build '${commander.target}'`);
+    log(`ERROR: I do not know how to build '${commander.target}'`)
   }
-  log ("Finished build.");
+  log('Finished build.')
 }
 
 doBuild()

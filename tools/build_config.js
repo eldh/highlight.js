@@ -7,7 +7,7 @@ module.exports = {
   clean_css: {},
   rollup: {
     node: {
-      output: { format: 'esm' },
+      output: { format: 'cjs', strict: false, exports: 'auto' },
       input: {
         plugins: [
           cjsPlugin(),
@@ -27,23 +27,13 @@ module.exports = {
       input: {
         plugins: [jsonPlugin()],
       },
-      output: {
-        name: 'hljs',
-        format: 'iife',
-        footer:
-          "if (typeof exports === 'object' && typeof module !== 'undefined') { module.exports = hljs; }",
-        interop: false,
-      },
+      output: { format: 'esm' },
     },
     browser: {
       input: {
-        plugins: [cjsPlugin(), jsonPlugin()],
+        plugins: [jsonPlugin()],
       },
-      output: {
-        format: 'iife',
-        outro: 'return module.exports.definer || module.exports;',
-        interop: false,
-      },
+      output: { format: 'esm' },
     },
   },
   terser: {
