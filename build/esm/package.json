@@ -1,6 +1,6 @@
 {
-   "name": "highlight.js",
-   "description": "Syntax highlighting with language autodetection.",
+   "name": "@highlightjs/esm",
+   "description": "Syntax highlighting with language autodetection. (pre-compiled ESM assets)",
    "keywords": [
       "highlight",
       "syntax"
@@ -1179,7 +1179,7 @@
       "mocha": "mocha",
       "lint": "eslint -c .eslintrc.js src/*.js src/lib/*.js",
       "build_and_test": "npm run build && npm run test",
-      "build": "node ./tools/build.js -t node",
+      "build": "node ./tools/build.js",
       "build-cdn": "node ./tools/build.js -t cdn",
       "build-browser": "node ./tools/build.js -t browser :common",
       "test": "mocha test",
